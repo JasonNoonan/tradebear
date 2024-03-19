@@ -18,6 +18,8 @@ defmodule TradebearWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/clients", PropertyManagement.ClientsLive
+    live "/clients/new", PropertyManagement.CreateClientLive
   end
 
   # Other scopes may use custom stacks.
