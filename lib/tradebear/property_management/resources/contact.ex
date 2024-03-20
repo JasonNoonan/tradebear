@@ -12,10 +12,18 @@ defmodule Tradebear.PropertyManagement.Contact do
 
     define :create, action: :create
     define :link_to_client, args: [:destination_client_id, :primary?]
+    define :get_by_id, args: [:id]
   end
 
   actions do
     defaults [:create, :read, :update, :destroy]
+
+    read :get_by_id do
+      get? true
+      argument :id, :uuid, allow_nil?: false
+
+      filter expr(id == ^arg(:id))
+    end
 
     update :link_to_client do
       accept []
@@ -52,12 +60,6 @@ defmodule Tradebear.PropertyManagement.Contact do
     has_many :notes, Tradebear.PropertyManagement.Note do
       filter expr(not is_nil(contact_id))
       destination_attribute :contact_id
-    end
-
-    many_to_many :clients, Tradebear.PropertyManagement.Client do
-      through Tradebear.PropertyManagement.ClientContact
-      source_attribute_on_join_resource :contact_id
-      destination_attribute_on_join_resource :client_id
     end
   end
 end

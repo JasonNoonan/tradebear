@@ -12,10 +12,18 @@ defmodule Tradebear.PropertyManagement.Client do
 
     define :create, action: :create
     define :get_all, action: :read
+    define :get_by_id, args: [:id]
   end
 
   actions do
     defaults [:create, :read, :update, :destroy]
+
+    read :get_by_id do
+      get? true
+      argument :id, :uuid, allow_nil?: false
+
+      filter expr(id == ^arg(:id))
+    end
   end
 
   attributes do
@@ -28,8 +36,12 @@ defmodule Tradebear.PropertyManagement.Client do
   relationships do
     has_many :notes, Tradebear.PropertyManagement.Note
 
-    has_many :contacts, Tradebear.PropertyManagement.ClientContact do
-      destination_attribute :client_id
+    many_to_many :contacts, Tradebear.PropertyManagement.Contact do
+      through Tradebear.PropertyManagement.ClientContact
+      source_attribute :id
+      source_attribute_on_join_resource :client_id
+      destination_attribute :id
+      destination_attribute_on_join_resource :contact_id
     end
 
     has_one :primary_contact, Tradebear.PropertyManagement.ClientContact do

@@ -20,6 +20,8 @@ defmodule TradebearWeb.Router do
     get "/", PageController, :home
     live "/clients", PropertyManagement.ClientsLive
     live "/clients/new", PropertyManagement.CreateClientLive
+    live "/clients/:id", PropertyManagement.ClientDetailsLive
+    live "/clients/:id/add_contact", PropertyManagement.AddContactLive
   end
 
   # Other scopes may use custom stacks.
